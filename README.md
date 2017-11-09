@@ -14,3 +14,6 @@ Version 0.1:
   Currently only one bird color is supported, and only daytime background is used
   Bird animation also needs to be edited
   
+Version 0.2:
+  Added a PAUSE_STATE and connected it to game logic, have to add pause menu to it yet
+  Fixed bird animation
