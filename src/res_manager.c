@@ -32,7 +32,8 @@ const char resource_list[TEX_COUNT][40]={
     "res/number_middle_7.png",
     "res/number_middle_8.png",
     "res/number_middle_9.png",
-    "res/panel_score.png"
+    "res/panel_score.png",
+    "res/button_pause.png"
     };
 
 struct res_manager

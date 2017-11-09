@@ -1,4 +1,3 @@
-/* TODO- fix flappy flap animation*/
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
@@ -9,6 +8,7 @@
 #include "state_manager.h"
 #include "input.h"
 #include "score.h"
+#include "towers.h"
 
 const float DIFF=60;
 const float GRAVITY=6.8;
@@ -36,12 +36,11 @@ void flappy_reset()
 
 void flappy_draw(int delta)
     {
-    static int last_jump;
     float ticks=(float)delta/10.0;
     if(jumped)
         {
         jumped=0;
-        last_jump=0;
+        //last_jump=0;
         rotation=-30;
         }
     switch(state_get())
@@ -53,8 +52,15 @@ void flappy_draw(int delta)
         break;
         case STT_FLAPING:
         case STT_FLYING:
+            if(rotation<-28)
+				cur_texture=1;
+			else if(rotation<-25)
+				cur_texture=2;
+			else if(rotation<-15)
+				cur_texture=1;
+			else
+				cur_texture=0;
             rotation+=0.7*ticks;
-            cur_texture++;
         break;
         }
     SDL_RenderCopyEx(get_res_renderer(),textures[cur_texture%3],NULL,&col,rotation,NULL,0);
@@ -74,6 +80,7 @@ void flappy_gravity(float ticks_dif)
 
 void flappy_update(struct press *press,int delta)
     {
+	int x,y;
     float ticks_dif=(float)(delta)/10.0;
     switch(state_get())
         {
@@ -86,7 +93,7 @@ void flappy_update(struct press *press,int delta)
                 flappy_jump();
                 }
             //changes state
-            if(press->is_pressed)
+            if(press->is_pressed==1 || press->is_pressed==3)
                 {
                 state_set(STT_FLAPING);
                 flappy_jump();
@@ -96,6 +103,15 @@ void flappy_update(struct press *press,int delta)
         break;
         case STT_FLAPING:
             if(press->is_pressed==1)
+				{
+				SDL_GetMouseState(&x,&y);
+				if(x>10 && x<36 && y>10 && y<38)
+					{
+					state_set(STT_OPTIONS);
+					break;
+					}
+				}
+            if(press->is_pressed==1 || press->is_pressed==3)
                 {
                 flappy_jump();
                 }
@@ -106,11 +122,17 @@ void flappy_update(struct press *press,int delta)
                 }
             if(col.h+col.y>=512-56*2)
                 {
+				col.y=512-112-col.h;
                 state_set(STT_GROUND);
                 int hscore=get_highscore();
                 if(hscore<get_score())
                     set_highscore(get_score());
                 }
+            if(col.y<0)
+				{
+				y_vel=0;
+				col.y=0;
+				}
             flappy_gravity(ticks_dif);
         break;
         case STT_HIT:
@@ -125,11 +147,22 @@ void flappy_update(struct press *press,int delta)
                 }
         break;
         case STT_GROUND:
-            if(press->is_pressed==1)
+            if(press->is_pressed==1 || press->is_pressed==3)
                 {
                 state_set(STT_FLYING);
                 flappy_reset();
                 }
+        break;
+        case STT_OPTIONS:
+			if(press->is_pressed==1)
+				{
+				SDL_GetMouseState(&x,&y);
+				if(x>10 && x<36 && y>10 && y<38)
+					{
+					state_set(STT_FLAPING);
+					break;
+					}
+				}
         break;
         }
     }

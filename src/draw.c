@@ -56,6 +56,20 @@ void draw_background(int delta)
         }
     }
 
+void draw_pause_button()
+	{
+	SDL_Renderer *ren=get_res_renderer();
+    SDL_Rect rect2={10,10,13*2,14*2};
+    switch(state_get())
+        {
+        //case STT_FLYING:
+        case STT_OPTIONS:
+        case STT_FLAPING:
+            SDL_RenderCopy(ren,get_res_texture(BUTTON_PAUSE),NULL,&rect2);
+        break;
+        }
+	}
+
 void draw_all(int delta)
     {
     draw_background(delta);
@@ -64,4 +78,5 @@ void draw_all(int delta)
     draw_floor(delta);
     draw_score();
     draw_score_panel();
+    draw_pause_button();
     }

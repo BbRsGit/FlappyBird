@@ -1,7 +1,7 @@
 #ifndef _STATE_MANAGER
 #define _STATE_MANAGER
 
-enum states{STT_FLYING=0,STT_FLAPING,STT_HIT,STT_GROUND};
+enum states{STT_FLYING=0,STT_FLAPING,STT_HIT,STT_GROUND,STT_OPTIONS};
 
 void state_set(int state);
 

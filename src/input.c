@@ -28,8 +28,10 @@ void input_handle(struct press* press)
                 press->y=event.motion.y;
             break;
             case SDL_KEYDOWN:
-                press->is_pressed=1;
+                press->is_pressed=3;
             break;
             }
         }
     }
+
+
