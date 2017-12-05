@@ -33,7 +33,13 @@ const char resource_list[TEX_COUNT][40]={
     "res/number_middle_8.png",
     "res/number_middle_9.png",
     "res/panel_score.png",
-    "res/button_pause.png"
+    "res/button_pause.png",
+    "res/button_resume.png",
+    "res/medal_bronze.png",
+    "res/medal_silver.png",
+    "res/medal_gold.png",
+    "res/medal_platinum.png",
+    "res/label_new.png"
     };
 
 struct res_manager
@@ -42,6 +48,7 @@ struct res_manager
     SDL_Renderer *ren;
     SDL_Texture **textures;
     int n_textures;
+    SDL_Surface *icon;
     };
 
 static ResManager res_manager;
@@ -72,6 +79,9 @@ int res_create_window()
     {
     if(!(res_manager.win = SDL_CreateWindow("FlappyBird",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,288,512,SDL_WINDOW_SHOWN)))
         return -1;
+    res_manager.icon=IMG_Load("res/flappy_bird_icon.png");
+    if(res_manager.icon)
+        SDL_SetWindowIcon(res_manager.win,res_manager.icon);
     return 0;
     }
 
@@ -96,7 +106,6 @@ int load_res_textures()
         }
     return 0;
     }
-
 
 SDL_Texture **get_res_texture_list(int n)
     {

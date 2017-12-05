@@ -18,6 +18,7 @@ int highscore=-1;
 
 int get_highscore()
     {
+    int error=-1;
     if(highscore==-1)
         {
         FILE *f=fopen("score","rb");
@@ -27,17 +28,19 @@ int get_highscore()
             }
         else
             {
-            fread(&highscore,sizeof(int),1,f);
+            error=fread(&highscore,sizeof(int),1,f);
             fclose(f);
             }
         }
-    return highscore;
+    if(error==100000)
+       return -1;
+    else
+        return highscore;
     }
 
 int set_highscore(int hscore)
     {
-    highscore=hscore;
-    return 0;
+    return highscore=hscore;
     }
 
 int save_highscore()
@@ -46,6 +49,7 @@ int save_highscore()
     fwrite(&highscore,sizeof(int),1,f);
     fflush(f);
     fclose(f);
+    return 0;
     }
 
 int get_score()
@@ -56,6 +60,7 @@ int get_score()
 int set_score(int n)
     {
     score = n;
+    return score;    
     }
 
 void draw_num(int x,int y,SDL_Texture *texture,SDL_Renderer *ren)
@@ -100,6 +105,27 @@ void draw_score_panel()
     SDL_Texture **tex=get_res_texture_list(LARGE_NUMBERS);
     SDL_Rect rect={144-113,256-57,113*2,57*2};
     SDL_RenderCopy(ren,get_res_texture(SCORE_PANNEL),NULL,&rect);
+
+    SDL_Rect medal={56,242,22*2,22*2};
+
+    if(score>100)
+        {
+        SDL_RenderCopy(ren,get_res_texture(MEDALS+3),NULL,&medal);
+        }
+    else if(score>50)
+        {
+        SDL_RenderCopy(ren,get_res_texture(MEDALS+2),NULL,&medal);
+        }
+    else if(score>20)
+        {
+        SDL_RenderCopy(ren,get_res_texture(MEDALS+1),NULL,&medal);
+        }
+    else if(score>10)
+        {
+        SDL_RenderCopy(ren,get_res_texture(MEDALS+0),NULL,&medal);
+        }
+
+
 
     draw_mid_num(144-113+160-6+12*3,256-57+32,tex[score%10],ren);
 

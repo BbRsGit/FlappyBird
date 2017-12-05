@@ -20,7 +20,6 @@ static SDL_Texture **textures;
 static float rotation;
 static int cur_texture;
 static int jumped=0;
-static int rotation_acc;
 
 void flappy_reset()
     {

@@ -5,6 +5,7 @@
 #define GAME_SPEED 1.3
 
 #include "res_manager.h"
+#include "score.h"
 
 /** Sets up SDL and IMG
     returns -1 on error else 0

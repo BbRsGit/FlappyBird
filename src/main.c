@@ -9,8 +9,8 @@
 #include "state_manager.h"
 #include "input.h"
 #include "draw.h"
-
-#define DELAY 16
+#include "score.h"
+#include "towers.h"
 
 void ggame_init();
 
@@ -19,17 +19,24 @@ int main(int argc,char **argv)
     ggame_init();
     state_set(STT_FLYING);
     flappy_reset();
-    int i;
+    int ticks=SDL_GetTicks();
+    int last_ticks=0;
     struct press press;
     while(1)
         {
         SDL_RenderClear(get_res_renderer());
         input_handle(&press);
-        tower_update(DELAY);
-        flappy_update(&press,DELAY);
-        draw_all(DELAY);
+        tower_update(16);
+        flappy_update(&press,16);
+        draw_all(16);
         SDL_RenderPresent(get_res_renderer());
-        SDL_Delay(16);
+        last_ticks=ticks;
+        ticks=SDL_GetTicks();
+        if(ticks-last_ticks>=16)
+            SDL_Delay(1);
+        else
+            SDL_Delay(16-(ticks-last_ticks));
+        ticks=SDL_GetTicks();
         }
     game_quit();
     return 0;

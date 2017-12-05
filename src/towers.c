@@ -13,6 +13,7 @@
 
 int tower_poz[3]={288,288,288};
 int tower_h[3]={288,288,288};
+int is_tower_behind=0;
 
 int tower_update(int delta)
     {
@@ -28,20 +29,25 @@ int tower_update(int delta)
                     {
                     tower_poz[i]=288+144*i;
                     tower_h[i]=-260+rand()%200;
+                    is_tower_behind=0;
                     }
                 }
             for(i=0;i<3;i++)
                 {
                 int temp=((float)delta/10)*GAME_SPEED;
                 tower_poz[i]-=temp;
-                if(tower_poz[i]==0 || tower_poz[i]==-1)
+                if(tower_poz[i]<0 && is_tower_behind==0)
+                    {
                     set_score(get_score()+1);
+                    is_tower_behind=1;
+                    }
                 if(tower_poz[i]<=-52)
                     {
                     if(i==0)
                         tower_poz[i]=tower_poz[2]+144;
                     else
                         tower_poz[i]=tower_poz[i-1]+144;
+                    is_tower_behind=0;
                     tower_h[i]=-260+rand()%200;
                     }
                 }
@@ -75,6 +81,7 @@ static int twr_draw(int x,int y)
         rect.y+=160*2+110;
         SDL_RenderCopy(ren,get_res_texture(PIPE_DOWN),NULL,&rect);
         }
+    return 0;
     }
 
 int tower_draw(int delta)
