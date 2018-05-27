@@ -1,10 +1,20 @@
 #ifndef _TOWERS_H
 #define _TOWERS_H
 
-int tower_update(int delta);
+#include <SDL2/SDL.h>
 
-int tower_draw(int delta);
+typedef struct Tower
+	{
+	SDL_Rect upper;
+	SDL_Rect bottom;
+	}Tower;
 
-int tower_collision(SDL_Rect *r);
+void tower_init(Tower *towers,int num);
+
+int tower_collided(Tower *tower,SDL_Rect *rect);
+
+int tower_update(Tower *towers,int num);
+
+int tower_draw(Tower *towers,int num);
 
 #endif // _TOWERS_H

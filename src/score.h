@@ -3,11 +3,13 @@
 
 int get_score();
 
-int set_score(int n);
+void reset_score();
+
+int update_score();
 
 int get_highscore();
 
-int set_highscore(int hscore);
+void update_highscore();
 
 int save_highscore();
 
