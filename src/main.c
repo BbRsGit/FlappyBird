@@ -12,24 +12,30 @@
 #include "score.h"
 #include "towers.h"
 
-void ggame_init();
+#define TOWERS_NUM 3
+
+Flappy flappy;
+Tower towers[TOWERS_NUM];
+
+
+static void main_game_init();
 
 int main(int argc,char **argv)
     {
-    ggame_init();
-    state_set(STT_FLYING);
-    flappy_reset();
+    main_game_init();
+	tower_init(towers,TOWERS_NUM);
     int ticks=SDL_GetTicks();
     int last_ticks=0;
-    struct press press;
+	int pressed;
     while(1)
         {
-        SDL_RenderClear(get_res_renderer());
-        input_handle(&press);
-        tower_update(16);
-        flappy_update(&press,16);
-        draw_all(16);
-        SDL_RenderPresent(get_res_renderer());
+        pressed=input_handle();
+        tower_update(towers,TOWERS_NUM);
+        flappy_update(&flappy,pressed & 1); /*jump is active if 0b01 or 0b11 are pressed -> ergo pressed & 1*/
+        flappy_collision(&flappy,towers,TOWERS_NUM);
+		background_update();
+		draw_all(&flappy,towers,TOWERS_NUM,16);
+        get_res_render_draw();
         last_ticks=ticks;
         ticks=SDL_GetTicks();
         if(ticks-last_ticks>=16)
@@ -42,23 +48,27 @@ int main(int argc,char **argv)
     return 0;
     }
 
-void ggame_init()
+static void main_game_init()
     {
     if(game_init())
         {
-        printf("Error: Couldn't initialize SDL or IMG\n");
-        game_quit();
+        printf("Error: Couldn't initialize SDL or SDL_image\n");
+        exit(1);
         }
     if(game_screen_init())
         {
         printf("Error: Can't create a window or the renderer");
-        game_quit();
+        exit(1);
         }
     if(load_res_textures())
         {
         printf("Error: Couldn't load resources\n");
         printf("Find the file \"res/\" and place it next to the application\n");
-        game_quit();
+        exit(1);
         }
     get_highscore();
-    }
+
+    state_set(STT_FLYING);
+   
+   	flappy_reset(&flappy); 
+	}

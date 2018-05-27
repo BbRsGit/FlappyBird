@@ -22,9 +22,8 @@ int game_screen_init();
   */
 int game_load_res();
 
-/** Ends the game, cleares all the resources and calls exit()
-  * value of exit depends on 0 on sucess else 1
+/** Called by exit(), closes SDL and saves highscore
   */
-int game_quit();
+void game_quit();
 
 #endif //_SETUP_H

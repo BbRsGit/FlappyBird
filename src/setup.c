@@ -10,9 +10,10 @@ int game_init()
     {
     srand(time(NULL));
     if(SDL_Init(SDL_INIT_EVERYTHING))
-        return -1;
-    if(!IMG_Init(IMG_INIT_PNG))
-        return -1;
+		{return -1;}
+	if(!IMG_Init(IMG_INIT_PNG))
+		{return -1;}
+	atexit(game_quit);
     return 0;
     }
 
@@ -23,11 +24,9 @@ int game_screen_init()
     return 0;
     }
 
-int game_quit()
+void game_quit()
     {
     save_highscore();
     SDL_Quit();
     IMG_Quit();
-    exit(0);
-    return 0;
     }
