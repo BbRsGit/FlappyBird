@@ -6,6 +6,6 @@ OBJ = src/draw.o src/flappy.o src/input.o src/main.o src/res_manager.o src/score
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-game: $(OBJ)
+Flappy: $(OBJ)
 	gcc -o $@ $^ -lm $(CFLAGS) 
 
